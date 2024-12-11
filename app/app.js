@@ -16,7 +16,9 @@ import {
 
 import english from './translations/en.json';
 
-const store = configureStore({}, browserHistory);
+const store = configureStore(
+  {}, browserHistory
+);
 
 const createRoute = ({
   name,
