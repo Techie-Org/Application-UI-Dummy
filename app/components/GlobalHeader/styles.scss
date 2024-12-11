@@ -1,0 +1,62 @@
+@import 'styles/tools';
+
+.globalHeaderContainer {
+  background-color: rgb(224, 225, 215);
+  height: 72px;
+  padding: 12px 16px;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+
+.globalHeaderNavbar {
+  // background-color: rgba(0, 0, 0, 0.4);
+  // height: 100vh;
+  // left: 1;
+  padding-top: 12px;
+  position: absolute;
+  top: 0;
+  width: 80%;  
+}
+
+.headerLogoContainer {
+  display: flex;
+
+  align-items: center;
+  gap: 10px;
+}
+
+.headerLinkLogo {
+  align-self: flex-end;
+  height: 48px;
+  width: 48px;
+
+  &:focus {
+    outline: none;
+
+    img {
+      outline: 2px solid $white;
+    }
+  }
+}
+
+.navbarContainer {
+  display: flex;
+  justify-content: space-around;
+  padding: 16px;
+  box-shadow: 0 1px epx -2px black;
+}
+
+.navbarContainerTest {
+  display: flex;
+  justify-content: space-around;
+  padding: 16px;
+  box-shadow: 0 1px epx -2px black;
+}
+
+
+.headerLogoContainerTest {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
