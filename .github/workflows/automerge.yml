@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Automatically Merge PR
         uses: plm9606/automerge_actions@1.2.2
-        if: ${{ !(github.event.pull_request.base.ref == 'pod-development/*' || github.event.pull_request.base.ref == 'epic/*') }}
+        if: ${{ (github.event.pull_request.base.ref == 'pod-development/*' || github.event.pull_request.base.ref == 'epic/*') && (github.event.pull_request.head.ref != 'development')  }}
         with:
           # The label name to automatically merge. Default is "automerge".
           label-name: automerge
