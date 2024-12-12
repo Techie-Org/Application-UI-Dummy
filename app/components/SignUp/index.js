@@ -46,7 +46,7 @@ const SignUp = (props) => {
           </Typography>
         </Grid2>
         <Grid2>
-          <LocalForm form="SignUpForm" onSubmit={handleSignUpSubmit} data-test-id="signInForm">
+          <LocalForm form="SignUpForm" onSubmit={handleSignUpSubmit} data-test-id="signUpForm">
             <TextField
               model=".name"
               fullWidth
