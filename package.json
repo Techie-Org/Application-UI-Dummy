@@ -7,6 +7,10 @@
     "node": ">=20.17.0"
   },
   "scripts": {
+    "build": "webpack",
+    "build:clean": "npm run test:clean && rimraf ./build",
+    "clean:all": "npm run test:clean && npm run build:clean",
+    "clear-jest-cache": "rimraf ./.jest-cache ./.eslintcache ./.stylelintcache node_modules/.cache",
     "eject": "react-scripts eject",
     "extract-intl": "babel-node --presets @babel/preset-env -- ./internals/scripts/extract-intl.js",
     "lint": "npm run lint:js",
@@ -15,12 +19,13 @@
     "lint:js": "npm run lint:eslint -- . ",
     "lint:staged": "lint-staged",
     "prepare": "husky",
-    "start:server": "node server",
+    "pretest": "npm run test:clean && npm run lint",
+    "start": "node server",
     "test": "npm run test:default -- --coverage",
+    "test:clean": "rimraf ./coverage",
     "test:default": "node --expose-gc ./node_modules/jest-cli/bin/jest.js",
     "test:fast": "npm run test:default",
-    "verify-branch-naming": "node ./internals/scripts/verify-branch-naming",
-    "webpack:build": "webpack"
+    "verify-branch-naming": "node ./internals/scripts/verify-branch-naming"
   },
   "lint-staged": {
     "*.js": "npm run lint:eslint"
