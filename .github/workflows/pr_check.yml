@@ -8,7 +8,7 @@ env:
   node-version: 20.17.0
   cache-name: cache-node-modules
   jest-diff-max-files: 500
-  token-name: REPO_RO_TOKEN
+  token-name: SECRET_PERSONAL_TOKEN
   upstream-branch: development
 jobs:
   prepare:
@@ -27,16 +27,16 @@ jobs:
           echo "## Build Details" >> $GITHUB_STEP_SUMMARY
           echo "- **Action**: ${{ github.event.action }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Action**: ${{ github.event.action }}" >> $GITHUB_STEP_SUMMARY
-          echo **Upstream branch**: ${{ env.upstream-branch }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Upstream branch**: ${{ env.upstream-branch }}" >> $GITHUB_STEP_SUMMARY
           echo "- **isUpstream**: ${{ fromJSON(steps.get-labels.outputs.isUpstream) }}" >> $GITHUB_STEP_SUMMARY
           echo "- **isRelease**: ${{ fromJSON(steps.get-labels.outputs.isRelease) }}" >> $GITHUB_STEP_SUMMARY
           echo "- **PR Base**: ${{ github.event.pull_request.base.ref }}" >> $GITHUB_STEP_SUMMARY
-          echo **PR Base SHA**: ${{ github.event.pull_request.base.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo **PR Head**: ${{ github.event.pull_request.head.ref }}" >> $GITHUB_STEP_SUMMARY
-          echo **PR Head**: ${{ github.event.pull_request.head.sha }}" >> $GITHUB_STEP_SUMMARY
-          echo **Triggered by**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
-          echo **PR**: ${{ github.event.number }}" >> $GITHUB_STEP_SUMMARY
-          echo **Node version**: ${{ env.node-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**PR Base SHA**: ${{ github.event.pull_request.base.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**PR Head**: ${{ github.event.pull_request.head.ref }}" >> $GITHUB_STEP_SUMMARY
+          echo "**PR Head**: ${{ github.event.pull_request.head.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered by**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**PR**: ${{ github.event.number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Node version**: ${{ env.node-version }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Labels**: ${{ join(github.event.pull_request.labels.*.name, ', ') }}" >> $GITHUB_STEP_SUMMARY
           echo "- **step force-full**: ${{ fromJSON(steps.get-labels.outputs.isUpstream) || fromJSON (steps.get-labels.outputs.isRelease) || true }}" >> $GITHUB_STEP_SUMMARY
       - uses: actions/checkout@v4
@@ -48,7 +48,7 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: node modules
+          path: node_modules
           lookup-only: true
           key: ${{ env.cache-name }}-${{ runner.os }}-v${{ env.node-version }}-${{ hashFiles('**/package-lock.json') }}
       - if: ${{ steps.cache-npm.outputs.cache-hit != 'true'}}
@@ -61,7 +61,7 @@ jobs:
         run: |
           echo "**Node Modules cache miss!**" >> $GITHUB_STEP_SUMMARY
           npm config delete registry
-          npm config set node-options-"--max_old_space_size=4096"
+          npm config set node-options="--max_old_space_size=4096"
           echo "**npm config:**" >> $GITHUB_STEP_SUMMARY
           npm config ls >> $GITHUB_STEP_SUMMARY
           npm ci
@@ -77,9 +77,9 @@ jobs:
           node-version: ${{ env.node-version }}
       - name: npm config
         run: |
-          npm config set node-options-"--max_old_space_size=4096"
+          npm config set node-options="--max_old_space_size=4096"
           echo "**NPM Config**" >> $GITHUB_STEP_SUMMARY
-          npm config 1s >> $GITHUB_STEP_SUMMARY
+          npm config ls >> $GITHUB_STEP_SUMMARY
       - name: restore node modules from cache
         uses: actions/cache/restore@v4
         with:
@@ -129,13 +129,12 @@ jobs:
           enableCrossOsArchive: true
           fail-on-cache-miss: true
           key: ${{ env.cache-name }}-${{ runner.os }}-v${{ env.node-version }}-${{ hashFiles('**/package-lock.json') }}
-      - run: npm run download-datafile
       - name: check diff test affected files count with jest
         id: jest-diff
         #run: npm run test:fast -- -- --silent --changedSince=${{ github.event.pull_request.base.sha }}
         shell: bash
         run: |
-          echo file-count- npm run test:fast -- -- --silent --changedSince=${{ github.event.pull_request.base.sha }} --listTests | wc -l` >> $GITHUB_OUTPUT
+          echo `file-count- npm run test:fast -- -- --silent --changedSince=${{ github.event.pull_request.base.sha }} --listTests | wc -l` >> $GITHUB_OUTPUT
       - name: add to summary
         run: |
           echo "- **Prepare force-full**: ${{ fromJSON(needs.prepare.outputs.force-full) }}" >> $GITHUB_STEP_SUMMARY
@@ -155,7 +154,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        shard: [1, 2, 3, 4, 5, 6]
+        shard: [1, 2]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -167,7 +166,7 @@ jobs:
         run: |
           npm config set node-options="--max_old_space_size=4096"
           echo "**NPM Config**" >> $GITHUB_STEP_SUMMARY
-          npm config 15 >> $GITHUB_STEP_SUMMARY
+          npm config ls >> $GITHUB_STEP_SUMMARY
       - name: restore node modules from cache
         uses: actions/cache/restore@v4
         with:
@@ -175,7 +174,6 @@ jobs:
           enableCrossOsArchive: true
           fail-on-cache-miss: true
           key: ${{ env.cache-name }}-${{ runner.os }}-v${{env.node-version}}-${{ hashFiles('**/package-lock.json') }}
-      - run: npm run download-datafile
       - name: run sharded tests with jest
         run: npm run test:fast -- -- --silent --shard=${{ matrix.shard }}/${{ strategy.job-total}}
       - name: cancel all jobs on failure
@@ -189,7 +187,7 @@ jobs:
       - name: Add details to summary
         run: |
           echo "## Status Details" >> $GITHUB_STEP_SUMMARY
-          echo **jest-sharded**: ${{ needs.jest-sharded.result}}" >> $GITHUB_STEP_SUMMARY
+          echo "**jest-sharded**: ${{ needs.jest-sharded.result}}" >> $GITHUB_STEP_SUMMARY
           echo "- **jest-diff**: ${{ needs.jest-diff.result}}" >> $GITHUB_STEP_SUMMARY
           echo "- **lint**: ${{ needs.lint.result}}" >> $GITHUB_STEP_SUMMARY
       - name: fail step if any of the other jobs failed
