@@ -8,7 +8,7 @@ env:
   node-version: 20.17.0
   cache-name: cache-node-modules
   jest-diff-max-files: 500
-  token-name: REPO_RO_TOKEN
+  token-name: SECRET_PERSONAL_TOKEN
   upstream-branch: development
 jobs:
   prepare:
