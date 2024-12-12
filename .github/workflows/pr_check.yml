@@ -85,7 +85,7 @@ jobs:
         with:
           path: node_modules
           enableCrossOsArchive: true
-          fail-on-cache-miss: true
+          # fail-on-cache-miss: true
           key: ${{ env.cache-name }}-${{ runner.os }}-v${{ env.node-version }}-${{ hashFiles('**/package-lock.json') }}
       - name: clean up working dir
         run: |
@@ -127,7 +127,7 @@ jobs:
         with:
           path: node_modules
           enableCrossOsArchive: true
-          fail-on-cache-miss: true
+          # fail-on-cache-miss: true
           key: ${{ env.cache-name }}-${{ runner.os }}-v${{ env.node-version }}-${{ hashFiles('**/package-lock.json') }}
       - run: npm run download-datafile
       - name: check diff test affected files count with jest
@@ -173,7 +173,7 @@ jobs:
         with:
           path: node_modules
           enableCrossOsArchive: true
-          fail-on-cache-miss: true
+          # fail-on-cache-miss: true
           key: ${{ env.cache-name }}-${{ runner.os }}-v${{env.node-version}}-${{ hashFiles('**/package-lock.json') }}
       - run: npm run download-datafile
       - name: run sharded tests with jest
