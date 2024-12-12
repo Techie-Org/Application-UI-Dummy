@@ -129,7 +129,6 @@ jobs:
           enableCrossOsArchive: true
           fail-on-cache-miss: true
           key: ${{ env.cache-name }}-${{ runner.os }}-v${{ env.node-version }}-${{ hashFiles('**/package-lock.json') }}
-      - run: npm run download-datafile
       - name: check diff test affected files count with jest
         id: jest-diff
         #run: npm run test:fast -- -- --silent --changedSince=${{ github.event.pull_request.base.sha }}
@@ -175,7 +174,6 @@ jobs:
           enableCrossOsArchive: true
           fail-on-cache-miss: true
           key: ${{ env.cache-name }}-${{ runner.os }}-v${{env.node-version}}-${{ hashFiles('**/package-lock.json') }}
-      - run: npm run download-datafile
       - name: run sharded tests with jest
         run: npm run test:fast -- -- --silent --shard=${{ matrix.shard }}/${{ strategy.job-total}}
       - name: cancel all jobs on failure
