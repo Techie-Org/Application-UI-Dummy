@@ -25,20 +25,18 @@ jobs:
       - name: Add details to summary
         run: |
           echo "## Build Details" >> $GITHUB_STEP_SUMMARY
-          echo "- **Action**: ${{ github.event.action }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Action**: ${{ github.event.action }}" >> $GITHUB_STEP_SUMMARY
           echo "**Upstream branch**: ${{ env.upstream-branch }}" >> $GITHUB_STEP_SUMMARY
           echo "- **isUpstream**: ${{ fromJSON(steps.get-labels.outputs.isUpstream) }}" >> $GITHUB_STEP_SUMMARY
           echo "- **isRelease**: ${{ fromJSON(steps.get-labels.outputs.isRelease) }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **PR Base**: ${{ github.event.pull_request.base.ref }}" >> $GITHUB_STEP_SUMMARY
+          echo "**PR Base**: ${{ github.event.pull_request.base.ref }}" >> $GITHUB_STEP_SUMMARY
           echo "**PR Base SHA**: ${{ github.event.pull_request.base.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "**PR Head**: ${{ github.event.pull_request.head.ref }}" >> $GITHUB_STEP_SUMMARY
-          echo "**PR Head**: ${{ github.event.pull_request.head.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**PR Head SHA**: ${{ github.event.pull_request.head.sha }}" >> $GITHUB_STEP_SUMMARY
           echo "**Triggered by**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
           echo "**PR**: ${{ github.event.number }}" >> $GITHUB_STEP_SUMMARY
           echo "**Node version**: ${{ env.node-version }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Labels**: ${{ join(github.event.pull_request.labels.*.name, ', ') }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **step force-full**: ${{ fromJSON(steps.get-labels.outputs.isUpstream) || fromJSON (steps.get-labels.outputs.isRelease) || true }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **step force-full**: ${{ fromJSON(steps.get-labels.outputs.isUpstream) || fromJSON(steps.get-labels.outputs.isRelease) || true }}" >> $GITHUB_STEP_SUMMARY
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets[env.token-name] }}
