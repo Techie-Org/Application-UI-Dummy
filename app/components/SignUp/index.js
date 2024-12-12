@@ -46,7 +46,11 @@ const SignUp = (props) => {
           </Typography>
         </Grid2>
         <Grid2>
-          <LocalForm form="SignUpForm" onSubmit={handleSignUpSubmit} data-test-id="signUpForm">
+          <LocalForm
+            form="SignUpForm"
+            onSubmit={handleSignUpSubmit}
+            data-test-id="signUpForm"
+          >
             <TextField
               model=".name"
               fullWidth
@@ -54,11 +58,10 @@ const SignUp = (props) => {
               placeholder={intl.formatMessage(messages.namePlaceholder)}
               allowPattern={NAME_PATTERN}
               validators={[
-                isBlankValidator(
-                  intl.formatMessage(messages.blankNameError)
-                ),
+                isBlankValidator(intl.formatMessage(messages.blankNameError)),
                 lengthCheckValidator(
-                  intl.formatMessage(messages.minLengthNameError), 3,
+                  intl.formatMessage(messages.minLengthNameError),
+                  3
                 ),
               ]}
             />
@@ -69,12 +72,8 @@ const SignUp = (props) => {
               placeholder={intl.formatMessage(messages.emailPlaceholder)}
               allowPattern={EMAIL_ALLOWED_PATTERNS}
               validators={[
-                isBlankValidator(
-                  intl.formatMessage(messages.blankEmailError)
-                ),
-                emailValidator(
-                  intl.formatMessage(messages.invalidEmailError)
-                ),
+                isBlankValidator(intl.formatMessage(messages.blankEmailError)),
+                emailValidator(intl.formatMessage(messages.invalidEmailError)),
               ]}
             />
             <RadioField
@@ -90,11 +89,11 @@ const SignUp = (props) => {
               placeholder={intl.formatMessage(messages.phonePlaceholder)}
               allowPattern={PHONE_NUMBER_PATTERN}
               validators={[
-                isBlankValidator(
-                  intl.formatMessage(messages.blankPhoneError)
-                ),
+                isBlankValidator(intl.formatMessage(messages.blankPhoneError)),
                 lengthCheckValidator(
-                  intl.formatMessage(messages.lengthPhoneError), 10, 12
+                  intl.formatMessage(messages.lengthPhoneError),
+                  10,
+                  12
                 ),
               ]}
             />
@@ -107,7 +106,8 @@ const SignUp = (props) => {
                   intl.formatMessage(messages.blankPasswordError)
                 ),
                 lengthCheckValidator(
-                  intl.formatMessage(messages.passwordLengthError), 8,
+                  intl.formatMessage(messages.passwordLengthError),
+                  8
                 ),
               ]}
               fullWidth
