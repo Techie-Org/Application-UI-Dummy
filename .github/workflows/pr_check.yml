@@ -155,7 +155,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        shard: [1, 2, 3, 4, 5, 6]
+        shard: [1]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -177,7 +177,7 @@ jobs:
           key: ${{ env.cache-name }}-${{ runner.os }}-v${{env.node-version}}-${{ hashFiles('**/package-lock.json') }}
       - run: npm run download-datafile
       - name: run sharded tests with jest
-        run: npm run test:fast -- -- --silent
+        run: npm run test:fast -- -- --silent --shard=${{ matrix.shard }}/${{ strategy.job-total}}
       - name: cancel all jobs on failure
         if: failure()
         uses: andymckay/cancel-action@0.5
