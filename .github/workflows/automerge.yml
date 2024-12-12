@@ -45,7 +45,7 @@ jobs:
           auto-delete: false
           # GitHub WebHook Secret Token
           github-token: ${{ secrets.SECRET_PERSONAL_TOKEN }}
-      - if: ${{ !fromJSON(steps.get-labels.outputs.isDownstream) }}
+      - if: ${{ !steps.get-labels.outputs.isDownstream }}
         name: Automatically Merge PR
         uses: plm9606/automerge_actions@1.2.2
         with:
