@@ -9,6 +9,11 @@ jobs:
   Run_Actions:
     runs-on: ubuntu-latest
     steps:
+      - name: PR Summary
+        run: |
+          echo "- **PR Base**: ${{ github.event.pull_request.base.ref }}" >> $GITHUB_STEP_SUMMARY
+          echo **PR Head**: ${{ github.event.pull_request.head.ref }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Labels**: ${{ join(github.event.pull_request.labels.*.name, ', ') }}" >> $GITHUB_STEP_SUMMARY
       - name: Merging Downstream PR
         uses: plm9606/automerge_actions@1.2.2
         if: ${{ github.event.pull_request.base.ref == 'pod-development/*' || github.event.pull_request.base.ref == 'epic/*' && github.event.pull_request.head.ref == 'development'  }}
