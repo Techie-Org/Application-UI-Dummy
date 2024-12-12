@@ -22,6 +22,7 @@
     "pretest": "npm run test:clean && npm run lint",
     "start": "node server",
     "test": "npm run test:default -- --coverage",
+    "test:clean": "rimraf ./coverage",
     "test:default": "node --expose-gc ./node_modules/jest-cli/bin/jest.js",
     "test:fast": "npm run test:default",
     "verify-branch-naming": "node ./internals/scripts/verify-branch-naming"
