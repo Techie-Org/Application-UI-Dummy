@@ -25,8 +25,6 @@ jobs:
       - name: Add details to summary
         run: |
           echo "## Build Details" >> $GITHUB_STEP_SUMMARY
-          echo "- **Action**: ${{ github.event.action }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Action**: ${{ github.event.action }}" >> $GITHUB_STEP_SUMMARY
           echo "**Upstream branch**: ${{ env.upstream-branch }}" >> $GITHUB_STEP_SUMMARY
           echo "- **isUpstream**: ${{ fromJSON(steps.get-labels.outputs.isUpstream) }}" >> $GITHUB_STEP_SUMMARY
           echo "- **isRelease**: ${{ fromJSON(steps.get-labels.outputs.isRelease) }}" >> $GITHUB_STEP_SUMMARY
@@ -39,7 +37,7 @@ jobs:
           echo "**Node version**: ${{ env.node-version }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Labels**: ${{ join(github.event.pull_request.labels.*.name, ', ') }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Is Downstream**: ${{ contains(github.event.pull_request.labels.*.name, 'downstream') }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **step force-full**: ${{ fromJSON(steps.get-labels.outputs.isUpstream) || fromJSON (steps.get-labels.outputs.isRelease) || true }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **step force-full**: ${{ fromJSON(steps.get-labels.outputs.isUpstream) || fromJSON(steps.get-labels.outputs.isRelease) || true }}" >> $GITHUB_STEP_SUMMARY
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets[env.token-name] }}
