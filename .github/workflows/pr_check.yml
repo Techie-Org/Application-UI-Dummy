@@ -38,7 +38,7 @@ jobs:
           echo "**PR**: ${{ github.event.number }}" >> $GITHUB_STEP_SUMMARY
           echo "**Node version**: ${{ env.node-version }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Labels**: ${{ join(github.event.pull_request.labels.*.name, ', ') }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **All Labels**: ${{ github.event.pull_request.labels }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Is Downstream**: ${{ contains(github.event.pull_request.labels, 'downstream') }}" >> $GITHUB_STEP_SUMMARY
           echo "- **step force-full**: ${{ fromJSON(steps.get-labels.outputs.isUpstream) || fromJSON (steps.get-labels.outputs.isRelease) || true }}" >> $GITHUB_STEP_SUMMARY
       - uses: actions/checkout@v4
         with:
