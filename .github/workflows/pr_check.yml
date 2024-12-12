@@ -61,7 +61,7 @@ jobs:
         run: |
           echo "**Node Modules cache miss!**" >> $GITHUB_STEP_SUMMARY
           npm config delete registry
-          npm config set node-options-"--max_old_space_size=4096"
+          npm config set node_options="--max_old_space_size=4096"
           echo "**npm config:**" >> $GITHUB_STEP_SUMMARY
           npm config ls >> $GITHUB_STEP_SUMMARY
           npm ci
@@ -77,9 +77,9 @@ jobs:
           node-version: ${{ env.node-version }}
       - name: npm config
         run: |
-          npm config set node-options-"--max_old_space_size=4096"
+          npm config set node_options="--max_old_space_size=4096"
           echo "**NPM Config**" >> $GITHUB_STEP_SUMMARY
-          npm config 1s >> $GITHUB_STEP_SUMMARY
+          npm config ls >> $GITHUB_STEP_SUMMARY
       - name: restore node modules from cache
         uses: actions/cache/restore@v4
         with:
@@ -119,7 +119,7 @@ jobs:
           node-version: ${{ env.node-version }}
       - name: npm config
         run: |
-          npm config set node-options="--max_old_space_size=4096"
+          npm config set node_options="--max_old_space_size=4096"
           echo "**NPM Config**" >> $GITHUB_STEP_SUMMARY
           npm config ls >> $GITHUB_STEP_SUMMARY
       - name: restore node modules from cache
@@ -135,7 +135,7 @@ jobs:
         #run: npm run test:fast -- -- --silent --changedSince=${{ github.event.pull_request.base.sha }}
         shell: bash
         run: |
-          echo file-count- npm run test:fast -- -- --silent --changedSince=${{ github.event.pull_request.base.sha }} --listTests | wc -l` >> $GITHUB_OUTPUT
+          echo `file-count- npm run test:fast -- -- --silent --changedSince=${{ github.event.pull_request.base.sha }} --listTests | wc -l` >> $GITHUB_OUTPUT
       - name: add to summary
         run: |
           echo "- **Prepare force-full**: ${{ fromJSON(needs.prepare.outputs.force-full) }}" >> $GITHUB_STEP_SUMMARY
@@ -167,7 +167,7 @@ jobs:
         run: |
           npm config set node-options="--max_old_space_size=4096"
           echo "**NPM Config**" >> $GITHUB_STEP_SUMMARY
-          npm config 15 >> $GITHUB_STEP_SUMMARY
+          npm config ls >> $GITHUB_STEP_SUMMARY
       - name: restore node modules from cache
         uses: actions/cache/restore@v4
         with:
@@ -189,7 +189,7 @@ jobs:
       - name: Add details to summary
         run: |
           echo "## Status Details" >> $GITHUB_STEP_SUMMARY
-          echo **jest-sharded**: ${{ needs.jest-sharded.result}}" >> $GITHUB_STEP_SUMMARY
+          echo "**jest-sharded**: ${{ needs.jest-sharded.result}}" >> $GITHUB_STEP_SUMMARY
           echo "- **jest-diff**: ${{ needs.jest-diff.result}}" >> $GITHUB_STEP_SUMMARY
           echo "- **lint**: ${{ needs.lint.result}}" >> $GITHUB_STEP_SUMMARY
       - name: fail step if any of the other jobs failed

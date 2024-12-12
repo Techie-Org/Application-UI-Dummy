@@ -9,7 +9,9 @@ jobs:
   Run_Actions:
     runs-on: ubuntu-latest
     steps:
-      - name: PR Summary
+      - name: set outputs from labels
+        id: get-labels
+        shell: bash
         run: |
           echo "**PR Base**: ${{ github.event.pull_request.base.ref }}" >> $GITHUB_STEP_SUMMARY
           echo "**PR Head**: ${{ github.event.pull_request.head.ref }}" >> $GITHUB_STEP_SUMMARY
@@ -17,7 +19,7 @@ jobs:
           echo "**isDownstream**: ${{ (startsWith(github.event.pull_request.base.ref, 'pod-development/') || startsWith(github.event.pull_request.base.ref, 'epic/')) && github.event.pull_request.head.ref == 'development' }}" >> $GITHUB_STEP_SUMMARY
       - name: Merging Downstream PR
         uses: plm9606/automerge_actions@1.2.2
-        if: ${{ github.event.pull_request.base.ref == 'pod-development/*' || github.event.pull_request.base.ref == 'epic/*' && github.event.pull_request.head.ref == 'development'  }}
+        if: ${{ (startsWith(github.event.pull_request.base.ref, 'pod-development/') || startsWith(github.event.pull_request.base.ref, 'epic/')) && github.event.pull_request.head.ref == 'development' }}
         with:
           # The label name to automatically merge. Default is "automerge".
           label-name: downstream
@@ -31,7 +33,7 @@ jobs:
           github-token: ${{ secrets.SECRET_PERSONAL_TOKEN }}
       - name: Automatically Merge downstream PR
         uses: plm9606/automerge_actions@1.2.2
-        if: ${{ (github.event.pull_request.base.ref == 'pod-development/*' || github.event.pull_request.base.ref == 'epic/*') && !github.event.pull_request.head.ref == 'development'  }}
+        if: ${{ (startsWith(github.event.pull_request.base.ref, 'pod-development/') || startsWith(github.event.pull_request.base.ref, 'epic/')) && !github.event.pull_request.head.ref == 'development' }}
         with:
           # The label name to automatically merge. Default is "automerge".
           label-name: ${{ 'automerge' && 'downstream' }}
@@ -46,7 +48,7 @@ jobs:
       
       - name: Automatically Merge PR
         uses: plm9606/automerge_actions@1.2.2
-        if: ${{ (github.event.pull_request.base.ref == 'pod-development/*' || github.event.pull_request.base.ref == 'epic/*') && !github.event.pull_request.head.ref == 'development'  }}
+        if: ${{ (startsWith(github.event.pull_request.base.ref, 'pod-development/') || startsWith(github.event.pull_request.base.ref, 'epic/')) && github.event.pull_request.head.ref == 'development' }}
         with:
           # The label name to automatically merge. Default is "automerge".
           label-name: automerge
