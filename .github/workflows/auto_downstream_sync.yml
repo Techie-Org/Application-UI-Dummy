@@ -32,7 +32,7 @@ jobs:
             });
 
             if (issues.data.length === 0) {
-              console.log("No matching issues found. Exiting.", { issues, GitHub issues: github.rest.issues, owner, repo });
+              console.log("No matching issues found. Exiting.", { issues, gitHubIssues: github.rest.issues, owner, repo });
               return;
             }
 
