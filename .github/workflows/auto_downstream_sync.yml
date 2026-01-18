@@ -47,7 +47,7 @@ jobs:
             );
 
             if (filteredBranches.length === 0) {
-              console.log("No branches match the required prefixes. Exiting".);
+              console.log("No branches match the required prefixes. Exiting.");
               return;
             }
             
