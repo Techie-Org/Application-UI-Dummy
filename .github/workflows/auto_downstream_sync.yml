@@ -35,6 +35,7 @@ jobs:
               console.log("No matching issues found. Exiting.", { issues, gitHubIssues: github.rest.issues, owner, repo, contextRepo: context.repo });
               // return;
             }
+            console.log('branches fetched', issues);
 
             let subscribedBranches = issues.data.map(issue => ({
               branch: issue.title,
