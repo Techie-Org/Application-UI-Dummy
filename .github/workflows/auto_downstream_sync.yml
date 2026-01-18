@@ -48,7 +48,7 @@ jobs:
 
             if (filteredBranches.length === 0) {
               console.log("No branches match the required prefixes. Exiting.");
-              return;
+              // return;
             }
             
             console.log("Filtered Branches: ", filteredBranches.map(issue => issue.branch));
