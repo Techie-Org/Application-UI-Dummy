@@ -43,8 +43,8 @@ jobs:
             }));
 
             // Filter branches that start with "epic/" or "pod-development/"
-            let filteredBranches = subscribedBranches.filter(issue => 
-              issue.branch.startsWith("epic/") || issue.branch.startsWith("pod-development/")
+            let filteredBranches = issues.data.filter(issue => 
+              issue.name.startsWith("epic/") || issue.name.startsWith("pod-development/")
             );
 
             if (filteredBranches.length === 0) {
@@ -52,23 +52,23 @@ jobs:
               // return;
             }
             
-            console.log("Filtered Branches: ", filteredBranches.map(issue => issue.branch));
+            console.log("Filtered Branches: ", filteredBranches.map(issue => issue.name));
 
-            for (const { branch, labels } of filteredBranches) {
-              console.log(`Checking PRs for base: ${branch}, head: ${headBranch}`);
+            for (const { name } of filteredBranches) {
+              console.log(`Checking PRs for base: ${name}, head: ${headBranch}`);
 
               //Check if a PR already exists with the exact base and head
               const existingPRs = await github.rest.pulls.list({
                 owner,
                 repo,
                 state: open,
-                base: branch    // Check if base matches the target branch
+                base: name,    // Check if base matches the target branch
               });
 
               const existingMatchingPR = existingPRs.data.find(pr => pr.head.ref === headBranch);
 
               if (existingMatchingPR) {
-                console.log(`PR already exists for ${branch} (PR #${existingMatchingPR.number}). Skipping.`);
+                console.log(`PR already exists for ${name} (PR #${existingMatchingPR.number}). Skipping.`);
                 continue;
               }
 
@@ -77,16 +77,16 @@ jobs:
                 const compare = await github.rest.repos.compareCommits({
                   owner,
                   repo,
-                  base: branch,   // Target branch
+                  base: name,   // Target branch
                   head: headBranch,   // Source branch (development)
                 });
 
                 if (compare.data.commits.length === 0) {
-                  console.log(`No new commits to merge from ${headBranch} to ${branch}. Skipping the PR creation.`);
+                  console.log(`No new commits to merge from ${headBranch} to ${name}. Skipping the PR creation.`);
                   continue;
                 }
               } catch(error) {
-                console.log(`Error comparing branches ${headBranch} -> ${branch}:`, error.message);
+                console.log(`Error comparing branches ${headBranch} -> ${name}:`, error.message);
                 continue;
               }
 
@@ -94,13 +94,13 @@ jobs:
               const pr = await github.rest.pulls.create({
                 owner,
                 repo,
-                title: `Sync development -> ${branch}`,
+                title: `Sync development -> ${name}`,
                 head: headBranch,     // Set head to 'development'
-                base: branch,         // Set base to the target branch
-                body: `Automated PR to sync development into ${branch}`
+                base: name,         // Set base to the target branch
+                body: `Automated PR to sync development into ${name}`
               });
 
-              console.log(`PR created for ${branch}: ${pr.data.html_url}`);
+              console.log(`PR created for ${name}: ${pr.data.html_url}`);
 
               // Add labels from the issue and default labels to the PR
               const prLables = [...new Set([...labels, "automerge", "downstream"])];
