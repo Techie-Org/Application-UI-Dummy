@@ -23,7 +23,7 @@ jobs:
             const headBranch = "development";   // Source branch
 
             // Retrieve open issues with the 'downstream-sync' label
-            const issues = await github.rest.repo.listBranches({
+            const issues = await github.rest.repos.listBranches({
               owner,
               repo,
               state: "open",
