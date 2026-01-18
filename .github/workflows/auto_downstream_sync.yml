@@ -18,8 +18,8 @@ jobs:
         with:
           github-token: ${{ secrets.SECRET_PERSONAL_TOKEN }}
           script: |
-            const owner = context.repo.owner
-            const repo = context.repo.repo
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
             const headBranch = "development";   // Source branch
 
             // Retrieve open issues with the 'downstream-sync' label
