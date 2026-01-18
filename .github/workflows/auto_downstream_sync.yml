@@ -37,11 +37,6 @@ jobs:
             }
             console.log('branches fetched', issues);
 
-            let subscribedBranches = issues.data.map(issue => ({
-              branch: issue.title,
-              labels: issue.labels.map(label => label.name)
-            }));
-
             // Filter branches that start with "epic/" or "pod-development/"
             let filteredBranches = issues.data.filter(issue => 
               issue.name.startsWith("epic/") || issue.name.startsWith("pod-development/")
