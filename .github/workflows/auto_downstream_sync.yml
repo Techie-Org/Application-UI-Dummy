@@ -56,7 +56,7 @@ jobs:
               const existingPRs = await github.rest.pulls.list({
                 owner,
                 repo,
-                state: open,
+                state: "open",
                 base: name,    // Check if base matches the target branch
               });
 
