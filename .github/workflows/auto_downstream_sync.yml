@@ -98,7 +98,7 @@ jobs:
               console.log(`PR created for ${name}: ${pr.data.html_url}`);
 
               // Add labels from the issue and default labels to the PR
-              const prLables = [...new Set("automerge", "downstream")];
+              const prLabels = [...new Set("automerge", "downstream")];
               await github.rest.issues.addLabels({
                 owner,
                 repo,
