@@ -17,7 +17,7 @@ jobs:
         shell: bash
         run: |
           echo "**PR Base**: ${{ github.event.pull_request.base.ref }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Workflow run info ${{ toJson(github.event.workflow_run) }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Workflow run info**: ${{ toJson(github.event.workflow_run) }}" >> $GITHUB_STEP_SUMMARY
           echo "**PR Head**: ${{ github.event.pull_request.head.ref }}" >> $GITHUB_STEP_SUMMARY
           echo "**Labels**: ${{ join(github.event.pull_request.labels.*.name, ', ') }}" >> $GITHUB_STEP_SUMMARY
           echo "isUpstream=${{ github.event.pull_request.base.ref == 'development' }}" >> $GITHUB_OUTPUT
