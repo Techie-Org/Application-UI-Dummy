@@ -5,6 +5,9 @@ on:
     branches:
       - pod-development/* # The branch you want to automatically merge pull request
       - epic/*
+  workflow_run:
+    workflows: ["Create PRs for Downstream Sync (epic/pod-development)"]
+    types: [completed]
 jobs:
   Run_Actions:
     runs-on: ubuntu-latest
