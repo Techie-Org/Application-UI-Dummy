@@ -16,7 +16,7 @@ jobs:
       - name: Get subscribed branches and create PRs
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.SECRET_PERSONAL_TOKEN }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
@@ -33,7 +33,7 @@ jobs:
 
             if (issues.data.length === 0) {
               console.log("No matching issues found. Exiting.", { issues, gitHubIssues: github.rest.issues, owner, repo, contextRepo: context.repo });
-              // return;
+              return;
             }
             console.log('branches fetched', issues);
 
@@ -44,7 +44,7 @@ jobs:
 
             if (filteredBranches.length === 0) {
               console.log("No branches match the required prefixes. Exiting.");
-              // return;
+              return;
             }
             
             console.log("Filtered Branches: ", filteredBranches.map(issue => issue.name));
@@ -52,7 +52,7 @@ jobs:
             for (const { name } of filteredBranches) {
               console.log(`Checking PRs for base: ${name}, head: ${headBranch}`);
 
-              //Check if a PR already exists with the exact base and head
+              // Check if a PR already exists with the exact base and head
               const existingPRs = await github.rest.pulls.list({
                 owner,
                 repo,
@@ -98,7 +98,7 @@ jobs:
               console.log(`PR created for ${name}: ${pr.data.html_url}`);
 
               // Add labels from the issue and default labels to the PR
-              const prLabels = [...new Set(["automerge", "downstream", "downstream-sync"])];
+              const prLabels = [...new Set(["downstream", "downstream-sync"])];
               await github.rest.issues.addLabels({
                 owner,
                 repo,
