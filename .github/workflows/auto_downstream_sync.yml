@@ -95,7 +95,7 @@ jobs:
 
               // Add labels from the branch and default labels to the PR
               const prLabels = [...new Set(["downstream", "downstream-sync"])];
-              await github.rest.branches.addLabels({
+              await github.rest.issues.addLabels({
                 owner,
                 repo,
                 issue_number: pr.data.number,
