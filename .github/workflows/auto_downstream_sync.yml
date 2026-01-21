@@ -2,7 +2,7 @@ name: Create PRs for Downstream Sync (epic/pod-development)
 
 on:
   schedule:
-    - cron: '0 2 * * *'     # Runs daily at 2AM UTC
+    - cron: '0 2 * * *'     #Runs daily at 2AM UTC
   workflow_dispatch:          #Allows manual execution
 
 jobs:
@@ -22,24 +22,20 @@ jobs:
             const repo = context.repo.repo;
             const headBranch = "development";   // Source branch
 
-            // Retrieve open issues with the 'downstream-sync' label
-            const issues = await github.rest.repos.listBranches({
+            // Retrieve list of repo branches
+            const branches = await github.rest.repos.listBranches({
               owner,
               repo,
-              state: "open",
-              labels: "downstream-sync",
-              per_page: 100,
             });
 
-            if (issues.data.length === 0) {
-              console.log("No matching issues found. Exiting.", { issues, gitHubIssues: github.rest.issues, owner, repo, contextRepo: context.repo });
+            if (branches.data.length === 0) {
+              console.log("No matching branches found. Exiting.");
               return;
             }
-            console.log('branches fetched', issues);
 
             // Filter branches that start with "epic/" or "pod-development/"
-            let filteredBranches = issues.data.filter(issue => 
-              issue.name.startsWith("epic/") || issue.name.startsWith("pod-development/")
+            let filteredBranches = branches.data.filter(branch => 
+              branch.name.startsWith("epic/") || branch.name.startsWith("pod-development/")
             );
 
             if (filteredBranches.length === 0) {
@@ -47,7 +43,7 @@ jobs:
               return;
             }
             
-            console.log("Filtered Branches: ", filteredBranches.map(issue => issue.name));
+            console.log("Filtered Branches: ", filteredBranches.map(branch => branch.name));
 
             for (const { name } of filteredBranches) {
               console.log(`Checking PRs for base: ${name}, head: ${headBranch}`);
@@ -97,7 +93,7 @@ jobs:
 
               console.log(`PR created for ${name}: ${pr.data.html_url}`);
 
-              // Add labels from the issue and default labels to the PR
+              // Add labels from the branch and default labels to the PR
               const prLabels = [...new Set(["downstream", "downstream-sync"])];
               await github.rest.issues.addLabels({
                 owner,
