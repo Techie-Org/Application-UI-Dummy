@@ -19,7 +19,7 @@ jobs:
           app-id: ${{ vars.MERGE_BOT_APP_ID }}
           private-key: ${{ secrets.MERGE_BOT_SECRET_KEY }}
           owner: ${{ github.repository_owner }}
-          repositories: ${{ github.repository }}
+          repositories: ${{ github.event.repository.name }}
       - name: set outputs from labels
         id: get-labels
         shell: bash
