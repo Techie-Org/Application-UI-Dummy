@@ -5,6 +5,9 @@ on:
     branches:
       - pod-development/* # The branch you want to automatically merge pull request
       - epic/*
+  workflow_run:
+    workflows: ["pr_check"] # Name of the triggering workflow
+    types: [completed] # Trigger when the workflow run is completed
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
