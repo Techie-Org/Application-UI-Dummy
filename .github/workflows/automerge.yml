@@ -43,7 +43,7 @@ jobs:
           # Let the bot delete the merged branch. true or false.
           auto-delete: false
           # GitHub WebHook Secret Token
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.MERGE_BOT_SECRET_KEY }}
       - if: ${{ (fromJSON(steps.get-labels.outputs.isDownstream) && github.event.pull_request.head.ref != 'development') || fromJSON(steps.get-labels.outputs.isUpstream) }}
         name: Merging Manual Downstream or Upstream PR
         uses: plm9606/automerge_actions@1.2.2
