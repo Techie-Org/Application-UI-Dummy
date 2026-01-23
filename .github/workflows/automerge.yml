@@ -1,12 +1,10 @@
 name: Check PR can be merged
 on:
-  workflow_run:
-    workflows: ["pr_check"] # Name of the triggering workflow
-    types: [completed] # Trigger when the workflow run is completed
-    # branches:
-    #   - pod-development/* # The branch you want to automatically merge pull request
-    #   - epic/*
-
+  pull_request:
+    types: [labeled]
+    branches:
+      - pod-development/* # The branch you want to automatically merge pull request
+      - epic/*
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -26,13 +24,12 @@ jobs:
         id: get-labels
         shell: bash
         run: |
-          echo "**Github Event**: ${{ github.event }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Github ref**: ${{ github.ref }}" >> $GITHUB_STEP_SUMMARY
-      #     echo "**Labels**: ${{ join(github.event.pull_request.labels.*.name, ', ') }}" >> $GITHUB_STEP_SUMMARY
-      #     echo "isUpstream=${{ github.event.pull_request.base.ref == 'development' }}" >> $GITHUB_OUTPUT
-      #     echo "isDownstream=${{ (startsWith(github.event.pull_request.base.ref, 'pod-development/') || startsWith(github.event.pull_request.base.ref, 'epic/')) && (github.event.pull_request.head.ref == 'development' || contains(github.event.pull_request.labels.*.name, 'downstream')) }}" >> $GITHUB_OUTPUT
-      # - if: ${{ fromJSON(steps.get-labels.outputs.isDownstream) && github.event.pull_request.head.ref == 'development' }}
-      - if: ${{ true }}
+          echo "**PR Base**: ${{ github.event.pull_request.base.ref }}" >> $GITHUB_STEP_SUMMARY
+          echo "**PR Head**: ${{ github.event.pull_request.head.ref }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Labels**: ${{ join(github.event.pull_request.labels.*.name, ', ') }}" >> $GITHUB_STEP_SUMMARY
+          echo "isUpstream=${{ github.event.pull_request.base.ref == 'development' }}" >> $GITHUB_OUTPUT
+          echo "isDownstream=${{ (startsWith(github.event.pull_request.base.ref, 'pod-development/') || startsWith(github.event.pull_request.base.ref, 'epic/')) && (github.event.pull_request.head.ref == 'development' || contains(github.event.pull_request.labels.*.name, 'downstream')) }}" >> $GITHUB_OUTPUT
+      - if: ${{ fromJSON(steps.get-labels.outputs.isDownstream) && github.event.pull_request.head.ref == 'development' }}
         name: Merging Downstream PR
         uses: plm9606/automerge_actions@1.2.2
         with:
@@ -41,36 +38,36 @@ jobs:
           # The number of reviewers to automatically merge. Default is 1.
           reviewers-number: 0
           # The merge method ("merge", "squash", "rebase"). Default is "merge"
-          # merge-method: merge
+          merge-method: merge
           # Let the bot delete the merged branch. true or false.
           auto-delete: false
           # GitHub WebHook Secret Token
           github-token: ${{ steps.app-token.outputs.token }}
-      # - if: ${{ (fromJSON(steps.get-labels.outputs.isDownstream) && github.event.pull_request.head.ref != 'development') || fromJSON(steps.get-labels.outputs.isUpstream) }}
-      #   name: Merging Manual Downstream or Upstream PR
-      #   uses: plm9606/automerge_actions@1.2.2
-      #   with:
-      #     # The label name to automatically merge. Default is "automerge".
-      #     label-name: 'automerge'
-      #     # The number of reviewers to automatically merge. Default is 1.
-      #     reviewers-number: 0
-      #     # The merge method ("merge", "squash", "rebase"). Default is "merge"
-      #     merge-method: merge
-      #     # Let the bot delete the merged branch. true or false.
-      #     auto-delete: true
-      #     # GitHub WebHook Secret Token
-      #     github-token: ${{ steps.app-token.outputs.token }}
-      # - if: ${{ !fromJSON(steps.get-labels.outputs.isDownstream) }}
-      #   name: Automatically Merge PR
-      #   uses: plm9606/automerge_actions@1.2.2
-      #   with:
-      #     # The label name to automatically merge. Default is "automerge".
-      #     label-name: automerge
-      #     # The number of reviewers to automatically merge. Default is 1.
-      #     reviewers-number: 0
-      #     # The merge method ("merge", "squash", "rebase"). Default is "merge"
-      #     merge-method: squash
-          # # Let the bot delete the merged branch. true or false.
-          # auto-delete: false
-          # # GitHub WebHook Secret Token
-          # github-token: ${{ steps.app-token.outputs.token }}
+      - if: ${{ (fromJSON(steps.get-labels.outputs.isDownstream) && github.event.pull_request.head.ref != 'development') || fromJSON(steps.get-labels.outputs.isUpstream) }}
+        name: Merging Manual Downstream or Upstream PR
+        uses: plm9606/automerge_actions@1.2.2
+        with:
+          # The label name to automatically merge. Default is "automerge".
+          label-name: 'automerge'
+          # The number of reviewers to automatically merge. Default is 1.
+          reviewers-number: 0
+          # The merge method ("merge", "squash", "rebase"). Default is "merge"
+          merge-method: merge
+          # Let the bot delete the merged branch. true or false.
+          auto-delete: true
+          # GitHub WebHook Secret Token
+          github-token: ${{ steps.app-token.outputs.token }}
+      - if: ${{ !fromJSON(steps.get-labels.outputs.isDownstream) }}
+        name: Automatically Merge PR
+        uses: plm9606/automerge_actions@1.2.2
+        with:
+          # The label name to automatically merge. Default is "automerge".
+          label-name: automerge
+          # The number of reviewers to automatically merge. Default is 1.
+          reviewers-number: 0
+          # The merge method ("merge", "squash", "rebase"). Default is "merge"
+          merge-method: squash
+          # Let the bot delete the merged branch. true or false.
+          auto-delete: false
+          # GitHub WebHook Secret Token
+          github-token: ${{ steps.app-token.outputs.token }}
