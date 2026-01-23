@@ -18,8 +18,8 @@ jobs:
         with:
           app-id: ${{ vars.MERGE_BOT_APP_ID }}
           private-key: ${{ secrets.MERGE_BOT_SECRET_KEY }}
-          owner: "Techie-Org"
-          repositories: "Application-UI-Dummy"
+          owner: ${{ github.repository_owner }}
+          repositories: ${{ github.event.repository.name }}
       - name: set outputs from labels
         id: get-labels
         shell: bash
