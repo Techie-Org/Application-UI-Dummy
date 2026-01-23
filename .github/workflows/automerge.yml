@@ -33,7 +33,6 @@ jobs:
         name: Merging Downstream PR
         uses: plm9606/automerge_actions@1.2.2
         with:
-          token: ${{ steps.app-token.outputs.token }} # Use the generated App token
           # The label name to automatically merge. Default is "automerge".
           label-name: downstream
           # The number of reviewers to automatically merge. Default is 1.
@@ -71,4 +70,4 @@ jobs:
           # Let the bot delete the merged branch. true or false.
           auto-delete: false
           # GitHub WebHook Secret Token
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ steps.app-token.outputs.token }}
