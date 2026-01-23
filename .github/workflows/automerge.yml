@@ -26,8 +26,8 @@ jobs:
         id: get-labels
         shell: bash
         run: |
-          echo "**Github Workflow**: ${{ github.workflow }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Github object**: ${{ github }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Github Event**: ${{ github.event }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Github ref**: ${{ github.ref }}" >> $GITHUB_STEP_SUMMARY
       #     echo "**Labels**: ${{ join(github.event.pull_request.labels.*.name, ', ') }}" >> $GITHUB_STEP_SUMMARY
       #     echo "isUpstream=${{ github.event.pull_request.base.ref == 'development' }}" >> $GITHUB_OUTPUT
       #     echo "isDownstream=${{ (startsWith(github.event.pull_request.base.ref, 'pod-development/') || startsWith(github.event.pull_request.base.ref, 'epic/')) && (github.event.pull_request.head.ref == 'development' || contains(github.event.pull_request.labels.*.name, 'downstream')) }}" >> $GITHUB_OUTPUT
